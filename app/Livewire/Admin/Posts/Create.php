@@ -11,7 +11,7 @@ use App\Livewire\Forms\Admin\PostForm;
 class Create extends Component
 {
     use WithFileUploads;
-    
+
     public PostForm $postForm;
 
     #[Validate('image|max:1024')] // 1MB Max
@@ -28,9 +28,7 @@ class Create extends Component
     {
         $this->postForm->store();
 
-        dd($this->image);
-
-        // return $this->redirect('admin-galeri-photo' , navigate: true);
+        $this->redirectIntended(default: route('admin-galeri-photo', absolute: false), navigate: true);
     }
 
     public function closeForm()

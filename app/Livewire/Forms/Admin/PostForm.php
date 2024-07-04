@@ -35,9 +35,12 @@ class PostForm extends Form
             'user_id'       => auth()->id()
         ]);
 
-        $this->image->storeAs(path: 'photos', name: $this->image->getClientOriginalName());
-        // Image::create([
-        //     'post_id'   => $post->id,
-        // ]);
+        $pathImage = $this->image->storeAs(path: 'photos', name: $this->image->getClientOriginalName());
+
+        Image::create([
+            'post_id'   => $post->id,
+            'path'      => $pathImage
+        ]);
+
     }
 }
