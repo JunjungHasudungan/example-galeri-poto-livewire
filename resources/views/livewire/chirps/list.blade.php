@@ -1,18 +1,18 @@
 <?php
-use App\Models\Chirp; 
-use Illuminate\Database\Eloquent\Collection; 
-use Livewire\Attributes\On; 
+use App\Models\Chirp;
+use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public Collection $chirps; 
+    public Collection $chirps;
 
-    public ?Chirp $editing = null; 
+    public ?Chirp $editing = null;
 
     public function mount(): void
     {
-        $this->getChirps(); 
-    } 
+        $this->getChirps();
+    }
 
      #[On('chirp-created')]
      public function getChirps(): void
@@ -20,36 +20,36 @@ new class extends Component {
         $this->chirps = Chirp::with('user')
             ->latest()
             ->get();
-    } 
+    }
 
     public function edit(Chirp $chirp): void
     {
         $this->editing = $chirp;
- 
+
         $this->getChirps();
-    } 
+    }
 
        #[On('chirp-edit-canceled')]
-    #[On('chirp-updated')] 
+    #[On('chirp-updated')]
     public function disableEditing(): void
     {
         $this->editing = null;
- 
+
         $this->getChirps();
-    } 
+    }
 
     public function delete(Chirp $chirp): void
     {
         $this->authorize('delete', $chirp);
- 
+
         $chirp->delete();
- 
+
         $this->getChirps();
-    } 
+    }
 }; ?>
 
 <div>
-    <div class="mt-6 bg-white shadow-sm rounded-lg divide-y"> 
+    <div class="mt-6 bg-white shadow-sm rounded-lg divide-y">
         @foreach ($chirps as $chirp)
             <div class="p-6 flex space-x-2" wire:key="{{ $chirp->id }}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 -scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -62,32 +62,32 @@ new class extends Component {
                             <small class="ml-2 text-sm text-gray-600">{{ $chirp->created_at->format('j M Y, g:i a') }}</small>
                         </div>
                         @if ($chirp->user->is(auth()->user()))
-                        <x-dropdown>
-                            <x-slot name="trigger">
-                                <button>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                                    </svg>
-                                </button>
-                            </x-slot>
-                            <x-slot name="content">
-                                <x-dropdown-link wire:click="edit({{ $chirp->id }})">
-                                    {{ __('Edit') }}
-                                </x-dropdown-link>
-                                <x-dropdown-link wire:click="delete({{ $chirp->id }})" wire:confirm="Are you sure to delete this chirp?"> 
-                                    {{ __('Delete') }}
-                                </x-dropdown-link> 
-                            </x-slot>
-                        </x-dropdown>
-                    @endif
+                            <x-dropdown>
+                                <x-slot name="trigger">
+                                    <button>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                                        </svg>
+                                    </button>
+                                </x-slot>
+                                <x-slot name="content">
+                                    <x-dropdown-link wire:click="edit({{ $chirp->id }})">
+                                        {{ __('Edit') }}
+                                    </x-dropdown-link>
+                                    <x-dropdown-link wire:click="delete({{ $chirp->id }})" wire:confirm="Are you sure to delete this chirp?">
+                                        {{ __('Delete') }}
+                                    </x-dropdown-link>
+                                </x-slot>
+                            </x-dropdown>
+                        @endif
                     </div>
-                    @if ($chirp->is($editing)) 
+                    @if ($chirp->is($editing))
                         <livewire:chirps.edit :chirp="$chirp" :key="$chirp->id" />
                     @else
                         <p class="mt-4 text-lg text-gray-900">{{ $chirp->message }} dsd</p>
-                    @endif 
+                    @endif
                 </div>
             </div>
-        @endforeach 
+        @endforeach
     </div>
 </div>
