@@ -37,7 +37,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $chirp->user()->is($user);
+        return $post->user()->is($user);
     }
 
     /**
