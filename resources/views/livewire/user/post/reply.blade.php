@@ -25,7 +25,7 @@ new class extends Component {
             'content'   => $this->content
         ]);
 
-         $this->dispatch('post-reply-canceled');
+        $this->dispatch('post-reply-canceled');
     }
 
     public function cancel(): void
