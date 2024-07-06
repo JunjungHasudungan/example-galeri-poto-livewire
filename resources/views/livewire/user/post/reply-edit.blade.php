@@ -22,11 +22,11 @@ new class extends Component {
 
         $this->comment->update($validated);
 
-        $this->dispatch('post-reply-canceled');
+        $this->dispatch('close-field-comment');
     }
     public function cancel(): void
     {
-        $this->dispatch('post-reply-canceled');
+        $this->dispatch('close-field-comment');
     }
 
 }; ?>

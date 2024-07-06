@@ -44,8 +44,7 @@ new class extends Component {
         $this->getPosts();
     }
 
-    #[On('comment-updated')]
- #[On('post-reply-canceled')]
+    #[On('close-field-comment')]
     public function disableReplying(): void
     {
         $this->replying = null;
@@ -55,24 +54,21 @@ new class extends Component {
         $this->getPosts();
     }
 
-    // #[On('post-reply-canceled')]
-    // public function disableEditCommenting(): void
-    // {
-    //     $this->editCommenting = null;
-
-    //     $this->getPosts();
-    // }
-
     #[On('comment-created')]
     public function getPosts(): void
     {
-        $this->posts = Post::with(['image', 'comments'])->latest()->get();
+        $this->posts = Post::with(['image', 'comments', 'likes'])->latest()->get();
     }
 
      #[On('post-reply-success')]
     public function getAmountComments()
     {
         $this->comments = Post::with('comments')->count();
+    }
+
+    public function likePost(Post $post)
+    {
+        dd($post);
     }
 }; ?>
 
@@ -93,7 +89,7 @@ new class extends Component {
                         <x-dropdown-link wire:click="comment({{ $post->id }})">
                             {{ __('Comment') }}
                         </x-dropdown-link>
-                        <x-dropdown-link wire:click="like({{ $post->id }})" wire:confirm="Are you sure to delete this chirp?">
+                        <x-dropdown-link wire:click="likePost({{ $post->id }})">
                             {{ __('Like') }}
                         </x-dropdown-link>
                     </x-slot>
@@ -131,12 +127,12 @@ new class extends Component {
                         @if ($post->is($replying))
                             <livewire:user.post.reply :post="$post" :key="$post->id" />
                         @else
-                            {{-- @php
+                            @php
                                 $userComments = $post->comments->where('user_id', auth()->id())->take(1);
                                 $otherComments = $post->comments->where('user_id', '!=', auth()->id())->take(3);
                                 $comments = $userComments->merge($otherComments);
-                            @endphp --}}
-                            @foreach ($post->comments as $comment)
+                            @endphp
+                            @foreach ($comments as $comment)
                                 <div class="p-6 flex space-x-2" wire:key="{{ $comment->id }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 -scale-x-100" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />

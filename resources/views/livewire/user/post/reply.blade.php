@@ -25,12 +25,12 @@ new class extends Component {
             'content'   => $this->content
         ]);
 
-        $this->dispatch('post-reply-canceled');
+        $this->dispatch('close-field-comment');
     }
 
     public function cancel(): void
     {
-        $this->dispatch('post-reply-canceled');
+        $this->dispatch('close-field-comment');
     }
 }; ?>
 
