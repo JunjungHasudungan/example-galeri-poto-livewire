@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\{
-    Post, Comment
+    Post, Comment, Like
 };
 use Livewire\Volt\Component;
 use Livewire\Attributes\On;
@@ -25,6 +25,7 @@ new class extends Component {
     public function comment(Post $post): void
     {
         $this->replying = $post;
+        
         $this->getPosts();
 
         $this->getAmountComments();
@@ -54,7 +55,6 @@ new class extends Component {
         $this->getPosts();
     }
 
-    #[On('comment-created')]
     public function getPosts(): void
     {
         $this->posts = Post::with(['image', 'comments', 'likes'])->latest()->get();
@@ -68,7 +68,23 @@ new class extends Component {
 
     public function likePost(Post $post)
     {
-        dd($post);
+        $like = Like::where('post_id', $post->id)->first();
+
+        if (!$like) {
+
+            Like::create([
+                'post_id'   => $post->id,
+                'user_id'   => auth()->id()
+            ]);
+
+            $this->getPosts();
+
+        } else {
+
+            $like->delete();
+
+            $this->getPosts();
+        }
     }
 }; ?>
 
@@ -159,9 +175,9 @@ new class extends Component {
                                                         <x-dropdown-link wire:click="editComment({{ $comment->id }})">
                                                             {{ __('Edit') }}
                                                         </x-dropdown-link>
-                                                        <x-dropdown-link wire:click="deleteComment({{ $comment->id }})" wire:confirm="Are you sure to delete this comment?"> 
+                                                        <x-dropdown-link wire:click="deleteComment({{ $comment->id }})" wire:confirm="Are you sure to delete this comment?">
                                                             {{ __('Delete') }}
-                                                        </x-dropdown-link> 
+                                                        </x-dropdown-link>
                                                     </x-slot>
                                                 </x-dropdown>
                                             @endif
@@ -184,11 +200,11 @@ new class extends Component {
                                     </span>
                                 </span>
                                 <span  class="inline-flex items-center text-sm font-medium text-center ">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="{{ count($post->likes) > 0 ? "red" : "none" }}" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                     </svg>
                                     <span class="inline-flex items-center justify-center w-4 h-4 ms-2 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">
-                                    2
+                                    {{ count($post->likes) }}
                                     </span>
                                 </span>
                             </div>
