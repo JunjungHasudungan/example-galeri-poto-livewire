@@ -25,10 +25,9 @@ new class extends Component {
     public function comment(Post $post): void
     {
         $this->replying = $post;
-        
+
         $this->getPosts();
 
-        $this->getAmountComments();
     }
 
     public function editComment(Comment $comment): void
@@ -60,21 +59,16 @@ new class extends Component {
         $this->posts = Post::with(['image', 'comments', 'likes'])->latest()->get();
     }
 
-     #[On('post-reply-success')]
-    public function getAmountComments()
+    public function likePost($postId)
     {
-        $this->comments = Post::with('comments')->count();
-    }
-
-    public function likePost(Post $post)
-    {
-        $like = Like::where('post_id', $post->id)->first();
+        $userId = auth()->id();
+        $like = Like::where('post_id', $postId)->where('user_id', $userId)->first();
 
         if (!$like) {
 
             Like::create([
-                'post_id'   => $post->id,
-                'user_id'   => auth()->id()
+                'post_id'   => $postId,
+                'user_id'   => $userId
             ]);
 
             $this->getPosts();
