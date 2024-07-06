@@ -1,41 +1,38 @@
 <?php
 
-use App\Models\{Post, Comment};
-use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
+use App\Models\Comment;
+use Livewire\Attributes\Validate;
 
 new class extends Component {
-    public Post $post;
+
+    public Comment $comment;
 
     #[Validate('required', message: 'Komentar wajib diisi..')]
     public string $content = '';
 
-      public function mount(): void
+    public function mount(): void
     {
-        $this->content = '';
+        $this->content = $this->comment->content;
     }
 
-    public function reply()
+    public function updateComment()
     {
-        $this->validate();
+        $validated = $this->validate();
 
-        Comment::create([
-            'post_id'   => $this->post->id,
-            'user_id'   => auth()->id(),
-            'content'   => $this->content
-        ]);
+        $this->comment->update($validated);
 
-         $this->dispatch('post-reply-canceled');
+        $this->dispatch('post-reply-canceled');
     }
-
     public function cancel(): void
     {
         $this->dispatch('post-reply-canceled');
     }
+
 }; ?>
 
 <div>
-    <form wire:submit="reply">
+    <form wire:submit="updateComment">
         <textarea
             wire:model="content"
             class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
