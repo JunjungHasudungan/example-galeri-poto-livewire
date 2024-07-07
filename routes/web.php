@@ -14,6 +14,7 @@ use App\Livewire\User\{
 use App\Http\Controllers\User\{
     DashboardController as UserDashbardController,
     CommentController as UserCommentController,
+    LikeController as UserLikeController,
 };
 use App\Http\Controllers\ChirpController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function(){
     // ROUTE FOR USER
     Route::get('user-dashboard', [UserDashbardController::class, 'index'])->name('user-dashboard');
     Route::get('user-comments', [UserCommentController::class, 'index'])->name('user-comments');
+    Route::get('user-likes', [UserLikeController::class, 'index'])->name('user-likes');
     Route::get('chirps', [ChirpController::class, 'index'])->name('chirps');
 });
 

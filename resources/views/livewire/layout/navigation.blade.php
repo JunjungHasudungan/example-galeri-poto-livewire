@@ -41,6 +41,10 @@ new class extends Component
                             {{ __('Komentar') }}
                         </x-nav-link>
 
+                        <x-nav-link :href="route('user-likes')" :active="request()->routeIs('user-likes')" wire:navigate>
+                            {{ __('Suka') }}
+                        </x-nav-link>
+
                         <x-nav-link :href="route('chirps')" :active="request()->routeIs('chirps')" wire:navigate>
                             {{ __('chirps') }}
                         </x-nav-link>

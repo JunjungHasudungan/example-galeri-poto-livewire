@@ -8,6 +8,13 @@ use App\Models\Post;
 
 class Index extends Component
 {
+    public $posts;
+
+    public function mount()
+    {
+        $this->posts = Post::with([''])->get();
+    }
+
     #[Title('Galeri')]
     #[Layout('layouts.app')]
     public function render()
