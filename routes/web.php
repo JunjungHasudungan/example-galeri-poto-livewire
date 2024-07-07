@@ -11,7 +11,10 @@ use App\Livewire\User\{
     Dashboard as UserDashboard
 };
 
-use App\Http\Controllers\User\DashboardController as UserDashbardController;
+use App\Http\Controllers\User\{
+    DashboardController as UserDashbardController,
+    CommentController as UserCommentController,
+};
 use App\Http\Controllers\ChirpController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,10 +35,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('galeri-photo-create', AdminCreateGaleri::class)->name('admin-galeri-photo-create');
 
     // ROUTE FOR USER
-    // Route::get('user-dashbaord', UserDashboard::class)->name('user-dashboard');
-
     Route::get('user-dashboard', [UserDashbardController::class, 'index'])->name('user-dashboard');
-
+    Route::get('user-comments', [UserCommentController::class, 'index'])->name('user-comments');
     Route::get('chirps', [ChirpController::class, 'index'])->name('chirps');
 });
 
