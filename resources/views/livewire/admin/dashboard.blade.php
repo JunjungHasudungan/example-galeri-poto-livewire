@@ -2,75 +2,126 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
 
-<div class="p-6 text-gray-900">
-    <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+            <div class="p-6 text-gray-900">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    @foreach ($groupedPosts as $category => $data)
+    <h2>{{ $category }}</h2>
+    <p>Total Posts: {{ $data['posts_count'] }}</p>
+    <p>Total Comments: {{ $data['comments_count'] }}</p>
+    <p>Total Likes: {{ $data['likes_count'] }}</p>
 
-
-<div class="p-6 bg-white border border-gray-200 rounded-lg shadow">
-
-
-<div class="flex items-center mb-5">
-    <p class="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800">8.7</p>
-    <p class="ms-2 font-medium text-gray-900">Konten</p>
-    <span class="w-1 h-1 mx-2 bg-gray-900 rounded-full dark:bg-gray-500"></span>
-    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">376 reviews</p>
-    <a href="#" class="ms-auto text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read all reviews</a>
-</div>
-<div class="gap-8 sm:grid sm:grid-cols-1">
-    <div>
-        <dl>
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Kesehatan') }} </dt>
-            <dd class="flex items-center mb-3">
-                <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
-                    <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 88%"></div>
+    @foreach ($data['posts'] as $post)
+        <div>
+            <h3>{{ $post->title }}</h3>
+            <p>{{ $post->content }}</p>
+            @if ($post->image)
+                <img src="{{ $post->image->url }}" alt="Post Image">
+            @endif
+            <p>Likes: {{ $post->likes_count }}</p>
+            <p>Comments: {{ $post->comments_count }}</p>
+        </div>
+    @endforeach
+@endforeach
+                    {{-- <div class="p-6 bg-white border border-gray-200 rounded-lg shadow">
+                        <div class="flex items-center mb-5">
+                            <p class="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800">8.7</p>
+                            <p class="ms-2 font-medium text-gray-900">Komentar</p>
+                            <span class="w-1 h-1 mx-2 bg-gray-900 rounded-full dark:bg-gray-500"></span>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">  reviews</p>
+                            <a href="#" class="ms-auto text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read all reviews</a>
+                        </div>
+                        <div class="gap-8 sm:grid sm:grid-cols-1">
+                            <div>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Kesehatan') }} </dt>
+                                    <dd class="flex items-center mb-3">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 88%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.8</span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Pendidikan') }} </dt>
+                                    <dd class="flex items-center mb-3">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 89%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.9</span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Makanan') }} </dt>
+                                    <dd class="flex items-center mb-3">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 88%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.8</span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Traveling') }} </dt>
+                                    <dd class="flex items-center">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 54%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">5.4</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="p-6 bg-white border border-gray-200 rounded-lg shadow">
+                        <div class="flex items-center mb-5">
+                            <p class="bg-blue-100 text-blue-800 text-sm font-semibold inline-flex items-center p-1.5 rounded dark:bg-blue-200 dark:text-blue-800">8.7</p>
+                            <p class="ms-2 font-medium text-gray-900">Suka</p>
+                            <span class="w-1 h-1 mx-2 bg-gray-900 rounded-full dark:bg-gray-500"></span>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">376 reviews</p>
+                            <a href="#" class="ms-auto text-sm font-medium text-blue-600 hover:underline dark:text-blue-500">Read all reviews</a>
+                        </div>
+                        <div class="gap-8 sm:grid sm:grid-cols-1">
+                            <div>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Kesehatan') }} </dt>
+                                    <dd class="flex items-center mb-3">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 88%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.8</span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Pendidikan') }} </dt>
+                                    <dd class="flex items-center mb-3">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 89%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.9</span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Makanan') }} </dt>
+                                    <dd class="flex items-center mb-3">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 88%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.8</span>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Traveling') }} </dt>
+                                    <dd class="flex items-center">
+                                        <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
+                                            <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 54%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">5.4</span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div> --}}
                 </div>
-                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.8</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Pendidikan') }} </dt>
-            <dd class="flex items-center mb-3">
-                <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
-                    <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 89%"></div>
-                </div>
-                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.9</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Makanan') }} </dt>
-            <dd class="flex items-center mb-3">
-                <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
-                    <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 88%"></div>
-                </div>
-                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">8.8</span>
-            </dd>
-        </dl>
-        <dl>
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('Traveling') }} </dt>
-            <dd class="flex items-center">
-                <div class="w-full bg-gray-200 rounded h-2.5 dark:bg-gray-700 me-2">
-                    <div class="bg-blue-600 h-2.5 rounded dark:bg-blue-500" style="width: 54%"></div>
-                </div>
-                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">5.4</span>
-            </dd>
-        </dl>
-    </div>
-</div>
-
-    {{-- <a href="#">
-        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>
-    </a>
-    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>
-    <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        Read more
-        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-        </svg>
-    </a> --}}
-</div>
-
-    </div>
-</div>
+            </div>
 
             <div class="p-6 text-gray-900">
                 @if (count($posts) > 0)
@@ -81,7 +132,8 @@
                                     <div class="flex justify-end px-4 pt-4">
                                     </div>
                                     <div class="flex flex-col items-center pb-5">
-                                        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ asset('storage/'. $post->image->path) }}" alt="Bonnie image"/>
+                                        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="{{ asset('storage/' . ($post->image ? $post->image->path : 'images/default.jpg')) }}" alt="Gambar Postingan" 
+                                        onerror="this.src='https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg'" alt="Bonnie image"/>
                                         <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white"> {{ $post->title }} </h5>
                                         <span class="text-sm text-gray-500 dark:text-gray-400"> {{ $post->category }} </span>
                                         <div class="flex mt-4 md:mt-6">

@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Admin\Posts;
 
+use Livewire\Component;
 use Livewire\Attributes\{Title, Layout};
 use Livewire\Attributes\Validate;
 use Livewire\WithFileUploads;
-use Livewire\Component;
+use App\Models\{Image, Post};
 use App\Livewire\Forms\Admin\PostForm;
 
 class Create extends Component
@@ -14,8 +15,17 @@ class Create extends Component
 
     public PostForm $postForm;
 
-    #[Validate('image|max:1024')] // 1MB Max
-    public $image = '';
+    #[Validate('required|min:5')]
+    public $title = '';
+
+    #[Validate('required|min:5')]
+    public $description = '';
+
+    #[Validate('required')]
+    public $category = '';
+
+    #[Validate('required|image|max:1024')] // 1MB Max
+    public $image;
 
     #[Title('Galeri')]
     #[Layout('layouts.app')]
@@ -24,15 +34,38 @@ class Create extends Component
         return view('livewire.admin.posts.create');
     }
 
-    public function save()
+    public function store()
     {
-        $this->postForm->store();
+        $this->validate([
+            'title' => 'required|min:5',
+            'description'  => 'required|min:5',
+            'category' => 'required',
+            'image'     => 'required|image|max:1024'
+        ]);
 
-        $this->redirectIntended(default: route('admin-galeri-photo', absolute: false), navigate: true);
+        $post = Post::create([
+            'title' => $this->title,
+            'description'   => $this->description,
+            'category'      => $this->category,
+            'user_id'       => auth()->id()
+        ]);
+
+        $pathImage = $this->image->store('images', 'public');
+
+        Image::create([
+            'post_id'   => $post->id,
+            'path'      => $pathImage
+        ]);
+
+        $this->dispatch('post-saved');
+        $this->reset();
+
+        $this->dispatch('post-created');
+
     }
 
     public function closeForm()
     {
-        $this->redirectIntended(default: route('admin-galeri-photo', absolute: false), navigate: true);
+        $this->redirectRoute('admin-galeri-photo', absolute:true, navigate:true);
     }
 }

@@ -8,12 +8,6 @@ use App\Models\Post;
 
 class Index extends Component
 {
-    public $posts;
-
-    public function mount()
-    {
-        $this->posts = Post::with([''])->get();
-    }
 
     #[Title('Galeri')]
     #[Layout('layouts.app')]
@@ -22,5 +16,10 @@ class Index extends Component
         return view('livewire.admin.posts.index', [
             'posts' => Post::with('image')->get()
         ]);
+    }
+
+    public function deletePost(Post $post)
+    {
+        $post->delete();
     }
 }

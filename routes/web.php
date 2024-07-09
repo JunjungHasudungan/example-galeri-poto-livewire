@@ -5,12 +5,14 @@ use App\Livewire\Admin\{
 };
 use App\Livewire\Admin\Posts\{
     Create as AdminCreateGaleri,
-    Index as AdminIndexGaleri
+    Index as AdminIndexGaleri,
+    Edit as AdminEditGaleri
 };
 use App\Livewire\User\{
     Dashboard as UserDashboard
 };
 
+use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\User\{
     DashboardController as UserDashbardController,
     CommentController as UserCommentController,
@@ -32,8 +34,10 @@ Route::view('profile', 'profile', ['title'=> 'Profile'])
 Route::middleware(['auth'])->group(function(){
     // ROUTE FOR ADMIN
     Route::get('admin-dashboard', AdminDashboard::class)->name('admin-dashboard');
-    Route::get('galeri-photo', AdminIndexGaleri::class)->name('admin-galeri-photo');
+    // Route::get('galeri-photo', AdminIndexGaleri::class)->name('admin-galeri-photo');
+    Route::get('galeri-photo', [PostController::class, 'index'])->name('admin-galeri-photo');
     Route::get('galeri-photo-create', AdminCreateGaleri::class)->name('admin-galeri-photo-create');
+    Route::get('galeri-photo-edit/{post}', AdminEditGaleri::class)->name('admin-galeri-photo-edit');
 
     // ROUTE FOR USER
     Route::get('user-dashboard', [UserDashbardController::class, 'index'])->name('user-dashboard');
