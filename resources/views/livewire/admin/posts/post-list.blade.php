@@ -6,6 +6,7 @@
                 <div class="p-2 text-gray-900">
                     <div class="w-full border rounded-lg shadow bg-gray-600">
                         <div class="flex justify-end px-4 pt-4">
+                            @if ($post->user->is(auth()->user()))
                             <x-dropdown>
                                 <x-slot name="trigger">
                                     <button>
@@ -15,10 +16,11 @@
                                     </button>
                                 </x-slot>
                                 <x-slot name="content">
-                                    <x-dropdown-link>
+                                    <x-dropdown-link
+                                        wire:click="editPost({{$post->id}})">
                                         {{ __('Edit') }}
                                     </x-dropdown-link>
-                                    <x-dropdown-link 
+                                    <x-dropdown-link
                                         wire:click="deletePost({{$post->id}})"
                                         wire:confirm="yakin untuk dihapus?"
                                             >
@@ -26,22 +28,31 @@
                                     </x-dropdown-link>
                                 </x-slot>
                             </x-dropdown>
+                            @endif
                         </div>
-                        <div class="flex flex-col items-center bg-white shadow md:flex-row md:max-w-xl  dark:bg-gray-600">
-                            <div class="p-2">
-                                <img class="object-cover w-full rounded-lg h-96 md:h-auto md:w-48" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="">
+                        @if ($post->is($editPosting))
+                            <livewire:admin.posts.edit :post="$post" :key="$post->id" />
+                        @else
+                            <div class="flex flex-col items-center bg-white shadow md:flex-row md:max-w-xl  dark:bg-gray-600">
+                                <div class="p-2">
+                                    @if ($post->image)
+                                        <img class="rounded-lg h-24 w-24"  src="{{ asset('storage/'. $post->image->path) }}" alt="">
+                                    @else
+                                        <img class="rounded-lg h-24 w-24"  src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg" alt="">
+                                    @endif
+                                </div>
+                                <div class="flex flex-col justify-between p-2 leading-normal">
+                                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {{ $post->title }} </h5>
+                                    <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"> {{ $post->description }} </p>
+                                </div>
                             </div>
-                            <div class="flex flex-col justify-between p-2 leading-normal">
-                                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {{ $post->title }} </h5>
-                                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"> {{ $post->description }} </p>
+                            <div class="flex items-center mt-2 mb-2">
+                                <div class="flex items-center">
+                                    <h5 class="h-auto w-auto text-sm text-blue-600 font-semibold p-2"> Kategori </h5>
+                                </div>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3"> {{ $post->category }} </span>
                             </div>
-                        </div>
-                        <div class="flex items-center mt-2 mb-2">
-                            <div class="flex items-center">
-                                <h5 class="h-auto w-auto text-sm text-blue-600 font-semibold p-2"> Kategori </h5>
-                            </div>
-                            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3"> {{ $post->category }} </span>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

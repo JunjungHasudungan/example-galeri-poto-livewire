@@ -19,14 +19,28 @@ class Edit extends Component
 
     public PostForm $postForm;
 
-    #[Validate('image|max:1024')] // 1MB Max
+    #[Validate('required|min:5')]
+    public $title = '';
+
+    #[Validate('required|min:5')]
+    public $description = '';
+
+    #[Validate('required')]
+    public $category = '';
+
+    #[Validate('required|image|max:1024')] // 1MB Max
     public $image;
+
+    #[Validate('required|image|max:1024')] // 1MB Max
+    public $new_image;
 
 
     public function mount(Post $post): void
     {
-        $this->post = $post;
-        $this->postForm->setPost($post);
+        $this->title = $post->title;
+        $this->description =  $post->description;
+        $this->category = $post->category;
+        $this->image = $post->image;
     }
 
     #[Title('Galeri')]
@@ -41,38 +55,46 @@ class Edit extends Component
         $this->redirectRoute('admin-galeri-photo', absolute:true, navigate:true);
     }
 
-    public function save()
+    public function cancel()
     {
-        if (Storage::disk('public')->exists($this->postForm->image)) {
-                Storage::delete($this->postForm->image);
-                $newPathImage = $this->postForm->new_image->store('images', 'public');
+        $this->dispatch('close-post-edit');
+    }
 
-                Image::create([
-                    'post_id'   => $this->post->id,
-                    'path'      => $newPathImage
-                ]);
+    public function update()
+    {
+        $this->validate();
 
-                $this->post->update([
-                    'title' => $this->postForm->title,
-                    'description' => $this->postForm->description,
-                    'category'  => $this->postForm->category,
-                    'user_id'   => auth()->id()
-                ]);
-        } else {
-                $newPathImage = $this->postForm->new_image->store('images', 'public');
+        dd($this->new_image);
+        // if (Storage::disk('public')->exists($this->postForm->image)) {
+        //         Storage::delete($this->postForm->image);
+        //         $newPathImage = $this->postForm->new_image->store('images', 'public');
 
-                Image::create([
-                    'post_id'   => $this->post->id,
-                    'path'      => $newPathImage
-                ]);
+        //         Image::create([
+        //             'post_id'   => $this->post->id,
+        //             'path'      => $newPathImage
+        //         ]);
 
-                $this->post->update([
-                    'title' => $this->postForm->title,
-                    'description' => $this->postForm->description,
-                    'category'  => $this->postForm->category,
-                    'user_id'   => auth()->id()
-                ]);
-        }
-        
+        //         $this->post->update([
+        //             'title' => $this->postForm->title,
+        //             'description' => $this->postForm->description,
+        //             'category'  => $this->postForm->category,
+        //             'user_id'   => auth()->id()
+        //         ]);
+        // } else {
+        //         $newPathImage = $this->postForm->new_image->store('images', 'public');
+
+        //         Image::create([
+        //             'post_id'   => $this->post->id,
+        //             'path'      => $newPathImage
+        //         ]);
+
+        //         $this->post->update([
+        //             'title' => $this->postForm->title,
+        //             'description' => $this->postForm->description,
+        //             'category'  => $this->postForm->category,
+        //             'user_id'   => auth()->id()
+        //         ]);
+        // }
+
     }
 }

@@ -12,13 +12,14 @@ class PostList extends Component
 {
     use WithPagination;
 
-    // public $posts = [];
+    public Collection $lisPost;
+
+    public ?Post $editPosting = null;
 
     // #[On('post-created')]
     public function mount(): void
     {
-        // $this->posts = Post::with('image')->paginate(2);
-        //  $this->getPostList();
+         $this->getPostList();
     }
 
     #[On('post-created')]
@@ -37,10 +38,31 @@ class PostList extends Component
         // $this->posts = Post::paginate(2);
     }
 
+    public function getPosts(): void
+    {
+        $this->lisPost = Post::with(['image', 'comments', 'likes'])->latest()->get();
+    }
+
     public function deletePost(Post $post)
     {
         $post->delete();
 
         $this->dispatch('update-post');
+    }
+
+    public function editPost(Post $post)
+    {
+        $this->editPosting = $post;
+
+        $this->getPosts();
+    }
+
+    #[On('close-post-edit')]
+    public function disableEditingPost(): void
+    {
+
+        $this->editPosting = null;
+        
+        $this->getPosts();
     }
 }

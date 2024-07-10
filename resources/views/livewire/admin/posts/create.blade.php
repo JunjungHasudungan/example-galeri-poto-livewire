@@ -4,8 +4,6 @@
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-2 text-gray-900">
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-600">
-                    <!-- Modal header -->
-                    <!-- Modal body -->
                     <form   wire:submit="store"
                             class="p-4 md:p-5">
                         <div class="grid gap-4 mb-4 grid-cols-2">
